@@ -21,10 +21,12 @@
     "eslint-plugin-import": "^2.27.5",
     "eslint-plugin-prettier": "^4.2.1",
     "prettier": "^2.8.8",
+    "prisma": "^4.14.1",
     "tsx": "^3.12.7",
     "typescript": "^5.0.4"
   },
   "dependencies": {
+    "@prisma/client": "^4.14.1",
     "fastify": "^4.17.0"
   }
 }
