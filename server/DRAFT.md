@@ -16,5 +16,5 @@ Create our migrations
 Setup up a new Prisma project and set it to use SQLite, 'cause prisma uses Postgress as default
 
 Remember:
-  - prisma must be a development dependency
-  - @prisma/client on the other hand I'll use in prod
+  - prisma must be a development dependency, it's the ORM
+  - @prisma/client on the other hand I'll use in prod, it's a type-safe query builder
