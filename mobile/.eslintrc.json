@@ -1,6 +1,5 @@
 {
   "env": {
-    "browser": true,
     "es2022": true
   },
   "extends": [
@@ -8,8 +7,7 @@
     "plugin:jsx-a11y/recommended",
     "plugin:@typescript-eslint/recommended",
     "plugin:prettier/recommended",
-    "plugin:import/recommended",
-    "next/core-web-vitals"
+    "plugin:import/recommended"
   ],
   "globals": {
     "React": "readonly"
@@ -56,20 +54,11 @@
         ]
       }
     ],
-    "jsx-a11y/label-has-associated-control": [
-      2,
-      {
-        "labelComponents": [
-          "label"
-        ],
-        "labelAttributes": [
-          "htmlFor"
-        ],
-        "controlComponents": [
-          "input"
-        ]
-      }
-    ],
+    "jsx-a11y/label-has-associated-control": [ 2, {
+      "labelComponents": ["label"],
+      "labelAttributes": ["htmlFor"],
+      "controlComponents": ["input"]
+    }],
     "react/jsx-one-expression-per-line": "off",
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "warn",
