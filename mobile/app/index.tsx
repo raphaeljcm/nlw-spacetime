@@ -13,7 +13,7 @@ import { useRouter } from 'expo-router';
 import * as SecureStore from 'expo-secure-store';
 import { StatusBar } from 'expo-status-bar';
 import { styled } from 'nativewind';
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 import { ImageBackground, Text, TouchableOpacity, View } from 'react-native';
 
 const StylesStripes = styled(Stripes);
@@ -45,22 +45,25 @@ export default function App() {
     discovery,
   );
 
-  async function handleGithubOAuthCode(code: string) {
-    const response = await api.post('/register', { code });
+  const handleGithubOAuthCode = useCallback(
+    async (code: string) => {
+      const response = await api.post('/register', { code });
 
-    const { token } = response.data;
+      const { token } = response.data;
 
-    await SecureStore.setItemAsync('token', token);
+      await SecureStore.setItemAsync('token', token);
 
-    router.push('/memories');
-  }
+      router.push('/memories');
+    },
+    [router],
+  );
 
   useEffect(() => {
     if (response?.type === 'success') {
       const { code } = response.params;
       handleGithubOAuthCode(code);
     }
-  }, [response]);
+  }, [response, handleGithubOAuthCode]);
 
   if (!hasLoadedFonts) return null;
 
