@@ -1,8 +1,5 @@
 {
   "singleQuote": true,
   "trailingComma": "all",
-  "arrowParens": "avoid",
-  "importOrder": ["^@core/(.*)$", "^@server/(.*)$", "^@ui/(.*)$", "^[./]"],
-  "importOrderSeparation": true,
-  "importOrderSortSpecifiers": true
+  "arrowParens": "avoid"
 }
