@@ -1,7 +1,7 @@
-import blurBg from './assets/bg-blur.png';
-import NlwLogo from './assets/nlw-logo.svg';
-import Stripes from './assets/stripes.svg';
-import { api } from './src/lib/api';
+import blurBg from '../assets/bg-blur.png';
+import NlwLogo from '../assets/nlw-logo.svg';
+import Stripes from '../assets/stripes.svg';
+import { api } from '../src/lib/api';
 import { BaiJamjuree_700Bold } from '@expo-google-fonts/bai-jamjuree';
 import {
   Roboto_400Regular,
@@ -9,6 +9,7 @@ import {
   useFonts,
 } from '@expo-google-fonts/roboto';
 import { makeRedirectUri, useAuthRequest } from 'expo-auth-session';
+import { useRouter } from 'expo-router';
 import * as SecureStore from 'expo-secure-store';
 import { StatusBar } from 'expo-status-bar';
 import { styled } from 'nativewind';
@@ -25,6 +26,8 @@ const discovery = {
 };
 
 export default function App() {
+  const router = useRouter();
+
   const [hasLoadedFonts] = useFonts({
     Roboto_400Regular,
     Roboto_700Bold,
@@ -42,18 +45,20 @@ export default function App() {
     discovery,
   );
 
+  async function handleGithubOAuthCode(code: string) {
+    const response = await api.post('/register', { code });
+
+    const { token } = response.data;
+
+    await SecureStore.setItemAsync('token', token);
+
+    router.push('/memories');
+  }
+
   useEffect(() => {
     if (response?.type === 'success') {
       const { code } = response.params;
-
-      api
-        .post('/register', { code })
-        .then(res => {
-          const { token } = res.data;
-
-          SecureStore.setItemAsync('token', token);
-        })
-        .catch(console.log);
+      handleGithubOAuthCode(code);
     }
   }, [response]);
 
