@@ -8,8 +8,7 @@
     "plugin:jsx-a11y/recommended",
     "plugin:@typescript-eslint/recommended",
     "plugin:prettier/recommended",
-    "plugin:import/recommended",
-    "next/core-web-vitals"
+    "plugin:import/recommended"
   ],
   "globals": {
     "React": "readonly"
@@ -89,6 +88,12 @@
       {
         "ts": "never",
         "tsx": "never"
+      }
+    ],
+    "import/no-unresolved": [
+      "error",
+      {
+        "ignore": [ ".svg" ]
       }
     ],
     "@typescript-eslint/camelcase": "off"
