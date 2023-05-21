@@ -1,6 +1,7 @@
 import blurBg from './assets/bg-blur.png';
 import NlwLogo from './assets/nlw-logo.svg';
 import Stripes from './assets/stripes.svg';
+import { api } from './src/lib/api';
 import { BaiJamjuree_700Bold } from '@expo-google-fonts/bai-jamjuree';
 import {
   Roboto_400Regular,
@@ -8,6 +9,7 @@ import {
   useFonts,
 } from '@expo-google-fonts/roboto';
 import { makeRedirectUri, useAuthRequest } from 'expo-auth-session';
+import * as SecureStore from 'expo-secure-store';
 import { StatusBar } from 'expo-status-bar';
 import { styled } from 'nativewind';
 import { useEffect } from 'react';
@@ -29,7 +31,7 @@ export default function App() {
     BaiJamjuree_700Bold,
   });
 
-  const [request, response, signInWithGithub] = useAuthRequest(
+  const [_, response, signInWithGithub] = useAuthRequest(
     {
       clientId: '462a426ada0d31c98a69',
       scopes: ['identity'],
@@ -43,6 +45,15 @@ export default function App() {
   useEffect(() => {
     if (response?.type === 'success') {
       const { code } = response.params;
+
+      api
+        .post('/register', { code })
+        .then(res => {
+          const { token } = res.data;
+
+          SecureStore.setItemAsync('token', token);
+        })
+        .catch(console.log);
     }
   }, [response]);
 
