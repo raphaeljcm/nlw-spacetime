@@ -2,6 +2,8 @@
 
 import { ChangeEvent, useState } from 'react';
 
+const MAX_FILE_SIZE = 5_242_880;
+
 export function MediaPicker() {
   const [preview, setPreview] = useState<string | null>(null);
 
@@ -10,7 +12,14 @@ export function MediaPicker() {
 
     if (!files) return;
 
-    const previewUrl = URL.createObjectURL(files[0]);
+    const file = files[0];
+
+    if (file.size > MAX_FILE_SIZE) {
+      alert('O arquivo deve ter no máximo 5MB');
+      return;
+    }
+
+    const previewUrl = URL.createObjectURL(file);
     setPreview(previewUrl);
   }
 
