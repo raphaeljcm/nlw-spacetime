@@ -1,11 +1,14 @@
 import NlwLogo from '../assets/nlw-logo.svg';
 import Icon from '@expo/vector-icons/Feather';
-import { Link } from 'expo-router';
+import { Link, useRouter } from 'expo-router';
 import { useState } from 'react';
 import { Image, ScrollView, Switch, Text, TextInput, View } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import * as ImagePicker from 'expo-image-picker';
+
+import * as SecureStore from 'expo-secure-store';
+import { api } from '../src/lib/api';
 
 export default function NewMemory() {
   const [isPublic, setIsPublic] = useState(false);
@@ -13,6 +16,7 @@ export default function NewMemory() {
   const [preview, setPreview] = useState<string | null>(null);
 
   const { bottom, top } = useSafeAreaInsets();
+  const router = useRouter();
 
   async function openMediaPicker() {
     try {
@@ -27,8 +31,42 @@ export default function NewMemory() {
     }
   }
 
-  function handleCreateMemory() {
-    console.log(isPublic, content);
+  async function handleCreateMemory() {
+    const token = await SecureStore.getItemAsync('token');
+    let coverUrl = '';
+
+    if (preview) {
+      const uploadFormData = new FormData();
+
+      uploadFormData.append('file', {
+        name: 'image.jpg',
+        type: 'image/jpeg',
+        uri: preview,
+      } as any);
+
+      const uploadResponse = await api.post('/upload', uploadFormData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      coverUrl = uploadResponse.data.fileUrl;
+    }
+
+    await api.post(
+      '/memories',
+      {
+        content,
+        isPublic,
+        coverUrl,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    );
+
+    router.push('/memories');
   }
 
   return (
@@ -84,6 +122,7 @@ export default function NewMemory() {
           multiline
           value={content}
           onChangeText={setContent}
+          textAlignVertical="top"
           placeholder="Fique livre para adicionar fotos, vídeos e relatos sobre essa experiência que você quer lembrar para sempre"
           placeholderTextColor="#56565a"
           className="p-0 font-body text-lg text-gray-50"
