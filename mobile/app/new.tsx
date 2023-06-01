@@ -71,7 +71,7 @@ export default function NewMemory() {
 
   return (
     <ScrollView
-      className="flex-1 px-8"
+      className="flex-1 px-6"
       contentContainerStyle={{ paddingBottom: bottom, paddingTop: top }}
     >
       <View className="mt-4 flex-row items-center justify-between">
